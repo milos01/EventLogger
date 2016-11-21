@@ -1,0 +1,27 @@
+{
+  "name": "eventlogger",
+  "version": "1.0.0",
+  "description": "desc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milos01/EventLogger.git"
+  },
+  "keywords": [
+    "word"
+  ],
+  "author": "Milos Andric",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/milos01/EventLogger/issues"
+  },
+  "homepage": "https://github.com/milos01/EventLogger#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.8"
+  }
+}

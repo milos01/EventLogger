@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 // koristimo mongoose model koju smo kreirali u folderu model
 var User = require('./model/user');
+var Application = require("./model/application");
 // var Comment = require('../app/model/comment');
 
 mongoose.connect('mongodb://localhost/eventlogger');
@@ -40,10 +41,24 @@ userRouter
   .post('/', function(req, res, next) {
     var user = new User(req.body);
     user.save(function(err, entry) {
-      if (err) next(err);
+      if (err) {
+        return next(err);
+      }
 
       res.json(entry);
 
+    });
+  })
+  .post('/:id/application', function(req, res, next) {
+    User.findOne({"_id": req.params.id}, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      var appModel = new Application();
+      appModel.app_name = req.body.app_name;
+      user.applications.push(appModel);
+      user.save();
+      res.json(user);
     });
   })
   .put('/:id', function(req, res, next) {

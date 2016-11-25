@@ -22,7 +22,7 @@ var UsersSchema = new Schema({
   updatedAt: Date,
   // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
   // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
-  applications: [application]
+  applications: [application.schema]
 });
 
 

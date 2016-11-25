@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var event = require('./event');
 
 // kreiramo novu shemu
 
@@ -8,6 +9,24 @@ var ApplicaitionSchema = new Schema({
     type: String,
     required: true
   },
+  owner: { type: Schema.Types.ObjectId, ref: 'user' },
+  users: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+  description:{
+    type: String,
+    required: true
+  },
+  version :{
+    type: String
+  },
+  repo_link: {
+    type: String
+  },
+  dns: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  events: [event.schema],
   createdAt: Date,
   updatedAt: Date,
 });

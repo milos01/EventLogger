@@ -3,33 +3,39 @@ var Schema = mongoose.Schema;
 // kreiramo novu shemu
 
 
-var UsersSchema = new Schema({
-  first_name: {
+var EventSchema = new Schema({
+  event_type: {
     type: String,
     required: true
   },
-  last_name: {
+  app_version: {
+    type: String
+  },
+  stack: {
     type: String,
     required: true
   },
-  email: {
+  data:{
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
+  fragment: {
+    type: String,
+    required: true
+  },
+  comments: [{ type: Schema.Types.ObjectId, ref: 'comment' }],
+
   createdAt: Date,
   updatedAt: Date,
   // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
   // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
-  owner_applications: [{ type: Schema.Types.ObjectId, ref: 'application' }],
-  assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'application' }]
 });
 
 
 
 
 // prilikom snimanja se postavi datum
-UsersSchema.pre('save', function(next) {
+EventSchema.pre('save', function(next) {
   // preuzmemo trenutni datum
   var currentDate = new Date();
 
@@ -45,7 +51,7 @@ UsersSchema.pre('save', function(next) {
 });
 
 // od sheme kreiramo model koji cemo koristiti
-var User = mongoose.model('User', UsersSchema);
+var Event = mongoose.model('Event', EventSchema);
 
 // publikujemo kreirani model
-module.exports = User;
+module.exports = Event;

@@ -20,7 +20,8 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 8080; // na kom portu slusa server
 
 // ruter za blogEntries
-var userRouter = express.Router(); // koristimo express Router
+var userRouter = express.Router();
+var appRouter = express.Router();  // koristimo express Router
 
 // definisanje ruta za blog
 userRouter
@@ -40,12 +41,12 @@ userRouter
   })
   .post('/', function(req, res, next) {
     var user = new User(req.body);
-    user.save(function(err, entry) {
+    user.save(function(err, user) {
       if (err) {
         return next(err);
       }
 
-      res.json(entry);
+      res.json(user);
 
     });
   })
@@ -57,8 +58,28 @@ userRouter
       var appModel = new Application();
       appModel.app_name = req.body.app_name;
       user.applications.push(appModel);
-      user.save();
+      user.save(function(err, savedUser) {
+        if (err) {
+          return next(err);
+        }
+        res.json(savedUser);
+      });
+      
+    });
+  })
+  .get('/:id/application/:aid', function(req, res, next) {
+    Application.findOne({"_id": req.params.aid}, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+
       res.json(user);
+      // user.applications.find({_id: req.params.aid},function(err, app){
+      //   if (err) {
+      //     return next(err);
+      //   }
+      //   res.json(app);
+      // });
     });
   })
   .put('/:id', function(req, res, next) {
@@ -111,6 +132,7 @@ commentRouter
 
 // // dodavanje rutera zu blogEntries /api/blogEntries
 app.use('/api/user', userRouter);
+app.use('/api/application', appRouter);
 // // dodavanje ruter zu komentare /api/blogEntries
 // app.use('/api/comments', commentRouter);
 

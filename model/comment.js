@@ -3,33 +3,24 @@ var Schema = mongoose.Schema;
 // kreiramo novu shemu
 
 
-var UsersSchema = new Schema({
-  first_name: {
+var CommentSchema = new Schema({
+  text: {
     type: String,
     required: true
   },
-  last_name: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
+  owner: { type: Schema.Types.ObjectId, ref: 'user' },
   createdAt: Date,
   updatedAt: Date,
   // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
   // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
-  owner_applications: [{ type: Schema.Types.ObjectId, ref: 'application' }],
-  assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'application' }]
+  
 });
 
-
+CommentSchema.add({comments:[CommentSchema]});
 
 
 // prilikom snimanja se postavi datum
-UsersSchema.pre('save', function(next) {
+CommentSchema.pre('save', function(next) {
   // preuzmemo trenutni datum
   var currentDate = new Date();
 
@@ -45,7 +36,7 @@ UsersSchema.pre('save', function(next) {
 });
 
 // od sheme kreiramo model koji cemo koristiti
-var User = mongoose.model('User', UsersSchema);
+var Comment = mongoose.model('Comment', CommentSchema);
 
 // publikujemo kreirani model
-module.exports = User;
+module.exports = Comment;

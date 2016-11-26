@@ -25,21 +25,22 @@ var appRouter = express.Router();  // koristimo express Router
 
 // definisanje ruta za blog
 userRouter
-  .get('/:id', function(req, res, next) {
-    // BlogEntry.findOne({
-    //   "_id": req.params.id
-    // }).populate('comments').exec(function(err, entry) {
-    //   // ako se desila greska predjemo na sledeci middleware (za rukovanje greskama)
-    //   if (err) next(err);
-    //   res.json(entry);
-    // });
+  .get('/user/:id', function(req, res, next) {
+    User.findOne({"_id": req.params.id})
+    .populate('owner_applications').exec(function(err, user) {
+      // ako se desila greska predjemo na sledeci middleware (za rukovanje greskama)
+      if (err){
+        return next(err);
+      }
+      res.json(user);
+    });
   })
-  .get('/', function(req, res) {
+  .get('/user', function(req, res) {
       User.find({}, function(err, data, next) {
         res.json(data);
       });
   })
-  .post('/', function(req, res, next) {
+  .post('/user', function(req, res, next) {
     var user = new User(req.body);
     user.save(function(err, user) {
       if (err) {
@@ -50,38 +51,16 @@ userRouter
 
     });
   })
-  .post('/:id/application', function(req, res, next) {
+  .get('/:id/application', function(req, res, next) {
     User.findOne({"_id": req.params.id}, function(err, user) {
       if (err) {
         return next(err);
       }
-      var appModel = new Application();
-      appModel.app_name = req.body.app_name;
-      user.applications.push(appModel);
-      user.save(function(err, savedUser) {
-        if (err) {
-          return next(err);
-        }
-        res.json(savedUser);
-      });
-      
-    });
-  })
-  .get('/:id/application/:aid', function(req, res, next) {
-    Application.findOne({"_id": req.params.aid}, function(err, user) {
-      if (err) {
-        return next(err);
-      }
 
-      res.json(user);
-      // user.applications.find({_id: req.params.aid},function(err, app){
-      //   if (err) {
-      //     return next(err);
-      //   }
-      //   res.json(app);
-      // });
+      res.json(user.owner_applications);
     });
   })
+  
   .put('/:id', function(req, res, next) {
     // BlogEntry.findOne({
     //   "_id": req.params.id
@@ -107,9 +86,9 @@ userRouter
   });
 
 // ruter za comments
-var commentRouter = express.Router(); // koristimo express Router
+// koristimo express Router
 
-commentRouter
+appRouter
 .post('/blogEntry/:id',function(req, res, next) {
   // var comment = new Comment(req.body);
   // BlogEntry.findOne({"_id":req.params.id},function (err, entry) {
@@ -123,16 +102,75 @@ commentRouter
   //   });
   // });
 })
-.delete('/:id', function (req, res, next) {
-  // Comment.remove({"_id":req.params.id},function (err, successIndicator) {
-  //   if(err) next(err);
-  //   res.json(successIndicator);
-  // });
+.post('/user/:id/application', function(req, res, next) {
+    var application = new Application(req.body);
+    User.findOne({"_id": req.params.id}, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      application.save(function(err, savedApp){
+        if(err){
+          return next(err);
+        }
+        User.findByIdAndUpdate(user._id, {$push:{"owner_applications": savedApp._id}}, function (err, user) {
+        if(err){
+          return next(err);
+        }
+        Application.findByIdAndUpdate(savedApp._id, {$push:{"owner":user._id}}, function (err, user) {
+          if(err){
+            return next(err);
+          }
+          res.json("ok");
+        });
+        });
+      }); 
+  });
+})
+.post('/application/:aid/user/:id', function(req, res, next) {
+    User.findOne({"_id": req.params.id}, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      Application.findOne({"_id": req.params.aid}, function(err, application){
+        if(err){
+          return next(err);
+        }
+        Application.findByIdAndUpdate(application._id,{$push: {"users": user._id}}, function(err, user){
+          if(err){
+            return next(err);
+          }
+          res.json("ok");
+        });
+      });
+  });
+})
+.get('/application/:id', function(req, res, next) {
+    Application.findOne({"_id": req.params.id}).populate('users').populate('owner').exec(function(err, application) {
+      if (err) {
+        return next(err);
+      }
+      res.json(application);
+      // Application.findOne({"_id": req.params.id}).populate('owner').exec(function(err, application01) {
+      //   if (err) {
+      //     return next(err);
+      //   }
+      //   res.json(application01);
+      // });
+      
+    });
+  })
+.delete('/application/:id', function (req, res, next) {
+  Application.remove({"_id":req.params.id},function (err, successIndicator) {
+    if(err){
+      return next(err);
+    }
+    res.json(successIndicator);
+  });
 });
 
 // // dodavanje rutera zu blogEntries /api/blogEntries
-app.use('/api/user', userRouter);
-app.use('/api/application', appRouter);
+app.use('/api', userRouter);
+app.use('/api', appRouter);
 // // dodavanje ruter zu komentare /api/blogEntries
 // app.use('/api/comments', commentRouter);
 

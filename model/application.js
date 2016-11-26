@@ -9,8 +9,8 @@ var ApplicaitionSchema = new Schema({
     type: String,
     required: true
   },
-  owner: { type: Schema.Types.ObjectId, ref: 'user' },
-  users: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+  owner: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   description:{
     type: String,
     required: true

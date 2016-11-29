@@ -30,7 +30,6 @@ CommentSchema.pre('save', function(next) {
   // ako nije postavljena vrednost za createdAt, postavimo je
   if (!this.createdAt)
     this.createdAt = currentDate;
-
   // predjemo na sledecu funckiju u lancu
   next();
 });

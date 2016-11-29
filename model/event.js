@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var comment = require('./comment');
 // kreiramo novu shemu
 
 
@@ -23,7 +24,7 @@ var EventSchema = new Schema({
     type: String,
     required: true
   },
-  comments: [{ type: Schema.Types.ObjectId, ref: 'comment' }],
+  comments: [comment.schema],
 
   createdAt: Date,
   updatedAt: Date,

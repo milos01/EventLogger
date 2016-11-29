@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 // koristimo mongoose model koju smo kreirali u folderu model
 var User = require('./model/user');
 var Application = require("./model/application");
+var Event = require("./model/event");
+var Comment = require("./model/comment");
 // var Comment = require('../app/model/comment');
 
 mongoose.connect('mongodb://localhost/eventlogger');
@@ -21,7 +23,11 @@ var port = process.env.PORT || 8080; // na kom portu slusa server
 
 // ruter za blogEntries
 var userRouter = express.Router();
-var appRouter = express.Router();  // koristimo express Router
+var appRouter = express.Router();
+var eventRouter = express.Router();
+var commentRouter = express.Router(); 
+
+ // koristimo express Router
 
 // definisanje ruta za blog
 userRouter
@@ -51,7 +57,7 @@ userRouter
 
     });
   })
-  .get('/:id/application', function(req, res, next) {
+  .get('/user/:id/application', function(req, res, next) {
     User.findOne({"_id": req.params.id}, function(err, user) {
       if (err) {
         return next(err);
@@ -135,12 +141,19 @@ appRouter
         if(err){
           return next(err);
         }
-        Application.findByIdAndUpdate(application._id,{$push: {"users": user._id}}, function(err, user){
-          if(err){
-            return next(err);
-          }
-          res.json("ok");
-        });
+        
+          User.findByIdAndUpdate(user._id,{$push: {"assigned_applications": application._id}}, function(err, user1){
+            if(err){
+              return next(err);
+            }
+            Application.findByIdAndUpdate(application._id,{$push: {"users": user._id}}, function(err, app){
+              if(err){
+                return next(err);
+              }
+              res.json('ok');
+            });
+          });
+        
       });
   });
 })
@@ -168,9 +181,87 @@ appRouter
   });
 });
 
+
+
+eventRouter
+.post('/application/:aid/event', function(req, res, next) {
+  var event = new Event(req.body);
+    Application.findOne({"_id": req.params.aid}, function(err, application) {
+      if (err) {
+        return next(err);
+      }
+      application.events.push(event);
+      application.save(function(err, savedEvent){
+        if (err) {
+          return next(err);
+        }
+        res.json(savedEvent);
+      });
+  });
+})
+.get('/application/:aid/event', function(req, res, next) {
+    Application.findOne({"_id": req.params.aid}, function(err, application) {
+      if (err) {
+        return next(err);
+      }
+      res.json(application.events);
+  });
+})
+.delete('/application/:aid/event/:eid', function(req, res, next) {
+  Application.update( 
+      { _id: req.params.aid },
+      { $pull: { events : { _id : req.params.eid } } },
+      { safe: true },
+      function removeConnectionsCB(err, obj) {
+          res.json("ok");
+      });
+});
+
+commentRouter
+.post('/event/:eid/comment', function(req, res, next) {
+    var comment = new Comment(req.body);
+    
+    
+    Application.findOne({"events._id": req.params.eid}, function (err, ev) {
+      if (err) {
+        return next(err);
+      }
+     
+      var event = ev.events.filter(function (event) {
+        return event.data === 'some_data';
+      }).pop();
+      // res.json(event.comments);
+      event.comments.push(comment);
+      // res.json(event.comments);
+      ev.save(function(err, savedEvent) {
+        if (err) {
+          return next(err);
+        }
+        res.json(savedEvent);
+      });
+  });
+})
+.get('/event/:eid/comment', function(req, res, next) {
+    var comment = new Comment(req.body);
+    
+    
+    Application.findOne({"events._id": req.params.eid}, function (err, ev) {
+      if (err) {
+        return next(err);
+      }
+     
+      var event = ev.events.filter(function (event) {
+        return event.data === 'some_data';
+      }).pop();
+      res.json(event.comments);
+  });
+})
+
 // // dodavanje rutera zu blogEntries /api/blogEntries
 app.use('/api', userRouter);
 app.use('/api', appRouter);
+app.use('/api', eventRouter);
+app.use('/api', commentRouter);
 // // dodavanje ruter zu komentare /api/blogEntries
 // app.use('/api/comments', commentRouter);
 

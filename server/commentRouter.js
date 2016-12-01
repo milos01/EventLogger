@@ -50,5 +50,32 @@ commentRouter
         res.json(event.comments);
     });
   })
+   //Post new comment
+  .post('/event/:eid/comment/:cid/subomment', function(req, res, next) {
+      var comment = new Comment(req.body);
+      
+      
+      Application.findOne({"events._id": req.params.eid}, function (err, ev) {
+        if (err) {
+          return next(err);
+        }
+        var event = ev.events.filter(function (event) {
+          return event.data === 'some_data';
+        }).pop();
+
+        var comment1 = event.comments.filter(function (com) {
+          return com.text === 'some_textff';
+        }).pop();
+        // res.json(comment1);
+        comment1.comments.push(comment);
+        // res.json(event.comments);
+        ev.save(function(err, savedEvent) {
+          if (err) {
+            return next(err);
+          }
+          res.json(savedEvent);
+        });
+    });
+  })
 
 module.exports = commentRouter;

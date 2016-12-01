@@ -9,9 +9,6 @@ var approuter = require('./server/appRouter');
 var eventrouter = require('./server/eventRouter');
 var commentrouter = require('./server/commentRouter');
 
-
-
-
 app.use(bodyParser.urlencoded({
   extended: true
 }));

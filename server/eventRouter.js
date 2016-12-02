@@ -6,8 +6,14 @@ var User = require('../model/user');
 var Application = require("../model/application");
 var Event = require("../model/event");
 var Comment = require("../model/comment");
+var common = require('../events/eventsConf');
+require('../events/eventListeners');
+
+var commonEmitter = common.commonEmitter;
+
 
 var eventRouter = express.Router();
+
 
 eventRouter
   //Post new event
@@ -22,6 +28,7 @@ eventRouter
           if (err) {
             return next(err);
           }
+          commonEmitter.emit('sendMail', event, application.app_name);
           res.json(savedEvent);
         });
     });

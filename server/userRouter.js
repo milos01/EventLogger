@@ -6,10 +6,12 @@ var User = require('../model/user');
 var Application = require("../model/application");
 var Event = require("../model/event");
 var Comment = require("../model/comment");
+var authenticationCtrl = require('../controllers/authentication');
 
 var userRouter = express.Router();
 
 userRouter
+  
   //Get user by Id with owner_applications and assigned_applications
   .get('/user/:id', function(req, res, next) {
     User.findOne({"_id": req.params.id})
@@ -26,17 +28,9 @@ userRouter
         res.json(data);
       });
   })
-  //Post new user
-  .post('/user', function(req, res, next) {
-    var user = new User(req.body);
-    user.save(function(err, user) {
-      if (err) {
-        return next(err);
-      }
-
-      res.json(user);
-
-    });
-  })
+  //Register user
+  .post('/register', authenticationCtrl.register)
+  //Logi user
+  .post('/login', authenticationCtrl.login);
   
 module.exports = userRouter;

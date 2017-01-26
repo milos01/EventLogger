@@ -64,7 +64,7 @@ commentRouter
         }).pop();
 
         var comment1 = event.comments.filter(function (com) {
-          return com.text === 'some_textff';
+          return com.text === 'some_text';
         }).pop();
         // res.json(comment1);
         comment1.comments.push(comment);

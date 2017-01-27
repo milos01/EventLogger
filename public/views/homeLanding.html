@@ -49,12 +49,15 @@
                                 <tr ng-repeat="app in vm.applications">
                                     <td>
                                        {{$index}}
+                                       
                                     </td>
-                                    <td>
+                                  
+                                    <td> <a  ui-sref="applicationProf({appId: app._id})">
                                         {{app.app_name}}
-                                    </td>
+                                    	</a>
+                                    </td> 
                                     <td>
-                                        {{app.description}}
+                                        {{app.description}}11
                                     </td>
                                     <td>
                                         {{app.createdAt}}

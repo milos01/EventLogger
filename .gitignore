@@ -46,3 +46,5 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 /public/bower_components
+/public/js
+/public/css

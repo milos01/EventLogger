@@ -1,5 +1,6 @@
 (function (angular) {
 
+
   app = angular.module('EventLoggerApp', ['ui.router', 'restangular']);
 
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
@@ -18,6 +19,7 @@
 
             })
             .state('home', {
+                abstact: true,
                 url: "/home",
                 views: {
                     'mainView@': {
@@ -46,7 +48,19 @@
                     }
                 }
             })
+            .state('applicationProf', {
+                parent: 'home',
+                params : { appId: null },
+                views: {
+                    'profileView@home': {
+                        url: "applicationProf/:appId",
+                        templateUrl: "/views/aplication.html",
+                        controller: "eventlCtrl",
+                        controllerAs: 'vm'
 
+                    }
+                }
+            })
 
 
   })

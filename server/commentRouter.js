@@ -21,7 +21,7 @@ commentRouter
         }
        
         var event = ev.events.filter(function (event) {
-          return event.data === 'some_data';
+          return String(event._id) === req.params.eid;
         }).pop();
         // res.json(event.comments);
         event.comments.push(comment);

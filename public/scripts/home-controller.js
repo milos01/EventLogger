@@ -20,11 +20,11 @@
 		 }
 	});
 
-	app.controller('homeCtrl', function($location, meanData, authentication){
+	app.controller('homeCtrl', function($location, meanData, authentication, $state){
 		if(authentication.isLoggedIn()){
 		  var vm = this;
 		  vm.user = {};
-		 
+		  $state.go('homelanding');
 		  meanData.getLoggedUser()
 		    .then(function(user) {
 		      vm.user = {
@@ -43,5 +43,9 @@
 		 }else{
 		 	$location.path('/');
 		 }
+	});
+
+	app.controller('someCtrl', function(){
+
 	});
 })();

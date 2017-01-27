@@ -41,7 +41,7 @@
                 views: {
                     'profileView@home': {
                         templateUrl: "/views/somepage.html",
-                        controller: "homeCtrl"
+                        controller: "someCtrl"
                     }
                 }
             })

@@ -2,12 +2,17 @@
 <html>
 <head>
 	<title>Event logger</title>
-	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Overpass+Mono" rel="stylesheet">
 </head>
 <body ng-app="EventLoggerApp">
-<div ng-view></div>
+<div ui-view="mainView"></div>
 <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 
 <script type="text/javascript" src="/app.js"></script>
 <script type="text/javascript" src="/scripts/home-controller.js"></script>

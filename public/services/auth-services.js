@@ -10,7 +10,6 @@
     };
 
     var logout = function() {
-      console.log('logout');
       $window.localStorage.removeItem('mean-token');
     };
 

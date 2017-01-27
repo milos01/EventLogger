@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 module.exports.register = function(req, res) {
-
   var user = new User();
 
   user.first_name = req.body.first_name;
@@ -13,6 +12,11 @@ module.exports.register = function(req, res) {
   user.setPassword(req.body.password);
 
   user.save(function(err) {
+  	if(err){
+  		 res.json({
+		      "err" : err
+		    });
+  	}
     var token;
     token = user.generateJwt();
     res.status(200);

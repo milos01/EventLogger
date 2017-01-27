@@ -1,5 +1,6 @@
 (function () {
-	app.controller('homeCtrl', function(authentication, $location){
+	app.controller('loginCtrl', function(authentication, $location){
+		if(!authentication.isLoggedIn()){
 		 var vm = this;
 
 		  vm.credentials = {
@@ -11,16 +12,19 @@
 		    authentication
 		    .login(vm.credentials)
 		    .then(function(){
-		      $location.path('profile');
+		      $location.path('home');
 		    });
 		  };
+		 }else{
+		 	$location.path('home');
+		 }
 	});
 
-	app.controller('profileCtrl', function($location, meanData, authentication){
+	app.controller('homeCtrl', function($location, meanData, authentication){
 		if(authentication.isLoggedIn()){
 		  var vm = this;
 		  vm.user = {};
-
+		 
 		  meanData.getLoggedUser()
 		    .then(function(user) {
 		      vm.user = {

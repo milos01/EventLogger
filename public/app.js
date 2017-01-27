@@ -1,6 +1,6 @@
-(function () {
+(function (angular) {
 
-  app = angular.module('EventLoggerApp', ['ngRoute', 'ui.router']);
+  app = angular.module('EventLoggerApp', ['ui.router', 'restangular']);
 
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
     $urlRouterProvider.otherwise('/');
@@ -32,7 +32,8 @@
                 views: {
                     'profileView@home': {
                         templateUrl: "/views/homeLanding.html",
-                        controller: "homeCtrl"
+                        controller: "applicaitonCtrl",
+                        controllerAs: 'vm'
                     }
                 }
             })
@@ -48,6 +49,17 @@
 
 
 
-  });
+  })
+  .run(function(Restangular, $log, authentication) {
+        Restangular.setDefaultHeaders({Authorization: 'Bearer '+ authentication.getToken()});
+        Restangular.setBaseUrl("api");
+        Restangular.setErrorInterceptor(function(response) {
+            if (response.status === 500) {
+                $log.info("internal server error");
+                return true;
+            }
+            return true; // greska nije obradjena
+        });
+    });
 
-})();
+})(angular);

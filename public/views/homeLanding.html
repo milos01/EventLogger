@@ -1,1 +1,96 @@
-landing
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <h5>Applications</h5>
+        <button class="btn btn-info btn-xs pull-right" style="margin-top: -3px">Add app</button>
+        <div class="ibox-tools">
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-wrench"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="#">Config option 1</a>
+                </li>
+                <li><a href="#">Config option 2</a>
+                </li>
+            </ul>
+            <a class="close-link">
+                <i class="fa fa-times"></i>
+            </a>
+        </div>
+        
+    </div>
+    <div class="ibox-content">
+         <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+
+     
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content" style="border: none">
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                                <thead>
+                                <tr>
+
+                                    <th>App ID</th>
+                                    <th data-hide="phone">Customer</th>
+                                    <th data-hide="phone">Amount</th>
+                                    <th data-hide="phone">Date added</th>
+                                    <th data-hide="phone,tablet" ></th>
+                                    <th data-hide="phone"></th>
+                                    <th class="text-right">Action</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="app in vm.applications">
+                                    <td>
+                                       {{$index}}
+                                    </td>
+                                    <td>
+                                        {{app.app_name}}
+                                    </td>
+                                    <td>
+                                        {{app.description}}
+                                    </td>
+                                    <td>
+                                        {{app.createdAt}}
+                                    </td>
+                                    <td>
+                                        
+                                    </td>
+                                    <td>
+                                        <!-- <span class="label label-primary">Pending</span> -->
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <button class="btn-white btn btn-xs">View</button>
+                                            <button class="btn-white btn btn-xs">Edit</button>
+                                            <button class="btn-white btn btn-xs">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                         
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

@@ -1,4 +1,77 @@
+<div class="ibox">
+    <div class="ibox-content">
+        <div class="m-b-lg">
+            <div class="m-t-md" align="center">
+                <strong><h1>{{vm.application.app_name}}</h1></strong>
+            </div>
+        </div>
+    </div>
+</div>
 
-<div ng-repeat="ob in vm.eventList">
-	<li>{{ob.data}}</li>
+
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>Your event list</h5>
+        <div class="ibox-tools">
+            <!--<a href="" class="btn btn-primary btn-xs">Add new issue</a>-->
+        </div>
+    </div>
+    <div class="ibox-content">
+        <div class="m-b-lg">
+            <div class="m-t-md">
+                <strong>Found {{vm.eventList.length}} events.</strong>
+                
+                <button style="float:right" class="btn btn-default" ng-click="vm.openListUserModal(vm.application._id)">Show users</button>
+            </div>
+        </div>
+        <b>Show events:</b> <select ng-model="vm.filterEvents" >
+                <option value="name">All</option>
+                <option value="line100">line 100</option>
+                <option value="line102">line 102</option>
+            </select> <b>fragments</b>
+
+        </br>
+    </br>
+        <div class="table-responsive">
+            <table class="table table-hover issue-tracker">
+
+                <thead>
+                    <tr>
+                        <th>Event type</th>
+                        <th data-hide="phone">Fragment</th>
+                        <th data-hide="phone">Data</th>
+                        <th data-hide="phone">Stack</th>
+                        <th data-hide="phone" >Updated at</th>
+                        <th class="text-right">Created at</th>
+                    </tr>
+                </thead>
+                <tbody>  <!-- { fragment: 'line 100' }:true -->
+                <tr ng-repeat="ob in vm.eventList">
+                    <td class="issue-info">
+                        <a href="#">
+                            {{ob.event_type}}
+                        </a>
+                    </td>
+                    <td>
+						{{ob.fragment}}
+                    </td>
+
+                    <td>
+                    	{{ob.data}}
+                    </td>
+                    <td>
+                        {{ob.stack}}
+                    </td>
+                    <td>
+                        {{ob.updatedAt | date}}
+                    </td>
+                    <td class="text-right">
+                        {{ob.createdAt | date}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>

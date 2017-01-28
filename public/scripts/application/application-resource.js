@@ -10,6 +10,12 @@
 			});
 		}
 
+		retVal.getAppById = function(ida){
+			
+			return Restangular.one('application', ida).get().then(function(response){
+				return response;
+			});
+		}
 		return retVal;
 	})
 	

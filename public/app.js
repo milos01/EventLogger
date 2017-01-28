@@ -1,7 +1,7 @@
 (function (angular) {
 
 
-  app = angular.module('EventLoggerApp', ['ui.router', 'restangular']);
+  app = angular.module('EventLoggerApp', ['ui.router', 'restangular','ui.bootstrap']);
 
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
     $urlRouterProvider.otherwise('/');
@@ -19,7 +19,7 @@
 
             })
             .state('home', {
-                abstact: true,
+               
                 url: "/home",
                 views: {
                     'mainView@': {

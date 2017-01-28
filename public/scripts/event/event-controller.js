@@ -1,7 +1,7 @@
 (function(angular){
 
 
-	app.controller('eventlCtrl',function(EventResource,$stateParams,ApplicationResource,$uibModal){
+	app.controller('eventlCtrl',function(EventResource,$stateParams,ApplicationResource,$uibModal,filterFilter){
 
 		var vm = this;
 
@@ -17,6 +17,9 @@
 		});
 		vm.filterEvents = "All";
 
+		vm.getCount = function(f){
+			return filterFilter(vm.eventList, {fragment:f}).length;
+		}
 
 		vm.openListUserModal = function(ida) {
 			console.log("aaaaa");
@@ -48,5 +51,22 @@
 			$uibModalInstance.dismiss('cancel');
 		};
 	}]);
+
+	app.filter('unique', function() {
+	   return function(collection, keyname) {
+	      var output = [], 
+	          keys = [];
+
+	      angular.forEach(collection, function(item) {
+	          var key = item[keyname];
+	          if(keys.indexOf(key) === -1) {
+	              keys.push(key);
+	              output.push(item);
+	          }
+	      });
+
+	      return output;
+	   };
+	});
 
 })(angular);

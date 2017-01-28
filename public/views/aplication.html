@@ -24,11 +24,12 @@
                 <button style="float:right" class="btn btn-default" ng-click="vm.openListUserModal(vm.application._id)">Show users</button>
             </div>
         </div>
-        <b>Show events:</b> <select ng-model="vm.filterEvents" >
-                <option value="name">All</option>
-                <option value="line100">line 100</option>
-                <option value="line102">line 102</option>
-            </select> <b>fragments</b>
+      <b>Show events:</b> <select ng-model="vm.filterEvents">
+                <option value="" ng-if="false"></option>
+                <option ng-value="0">All</option>
+                <option ng-repeat="ob in vm.eventList | unique:'fragment'" ng-value="ob.fragment" >{{ob.fragment}} (
+In total {{vm.getCount(ob.fragment)}})</option>
+            </select> <b>fragments.</b>
 
         </br>
     </br>
@@ -46,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>  <!-- { fragment: 'line 100' }:true -->
-                <tr ng-repeat="ob in vm.eventList">
+                <tr ng-repeat="ob in vm.eventList | filter:vm.filterEvents">
                     <td class="issue-info">
                         <a href="#">
                             {{ob.event_type}}

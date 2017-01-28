@@ -20,58 +20,101 @@
         <div class="m-b-lg">
             <div class="m-t-md">
                 <strong>Found {{vm.eventList.length}} events.</strong>
-                
+
                 <button style="float:right" class="btn btn-default" ng-click="vm.openListUserModal(vm.application._id)">Show users</button>
+
             </div>
         </div>
-      <b>Show events:</b> <select ng-model="vm.filterEvents">
-                <option value="" ng-if="false"></option>
-                <option ng-value="0">All</option>
-                <option ng-repeat="ob in vm.eventList | unique:'fragment'" ng-value="ob.fragment" >{{ob.fragment}} (
-In total {{vm.getCount(ob.fragment)}})</option>
-            </select> <b>fragments.</b>
-
+        <div ng-if="vm.eventList.length!==0">
+            <div ng-if="vm.application.version">
+                <b>App  versions:  </b> <select ng-model="vm.appVersions" ng-init="vm.appVersions=0" ng-change="vm.getVersionList(vm.appVersions)" >
+                        <option ng-value="0">All</option>
+                        <option ng-repeat="ob in vm.eventList | unique:'app_version'" ng-value="ob.app_version" >{{ob.app_version}}</option>
+                    </select>
+                </br>
+            </div>
         </br>
-    </br>
-        <div class="table-responsive">
-            <table class="table table-hover issue-tracker">
 
-                <thead>
-                    <tr>
-                        <th>Event type</th>
-                        <th data-hide="phone">Fragment</th>
-                        <th data-hide="phone">Data</th>
-                        <th data-hide="phone">Stack</th>
-                        <th data-hide="phone" >Updated at</th>
-                        <th class="text-right">Created at</th>
+          <b>Show events:</b> <select ng-model="vm.filterEvents" ng-init="vm.filterEvents=0">
+                    <!-- <option value="" ng-if="false"></option> -->
+                    <option ng-value="0">All</option>
+                    <option ng-repeat="ob in vm.eventList | unique:'fragment'" ng-value="ob.fragment" >{{ob.fragment}} (
+    In total {{vm.getCount(ob.fragment)}})</option>
+                </select> <b>fragments.</b>
+
+
+<!--         </br>
+          <b>Names:</b> <select ng-model="vm.filterNames" ng-init="vm.filterNames=0">
+                    <option ng-value="0">All</option>
+                    <option ng-repeat="ob in vm.fragmentNames" ng-value="ob" >{{ob}}</option>
+                </select> -->
+            </br>
+        </br>
+            <div class="table-responsive">
+                <table class="table table-hover issue-tracker">
+
+                    <thead>
+                        <tr>
+                            <th>Event type</th>
+                            <th data-hide="phone">Fragment</th>
+                          <!--   <th data-hide="phone">Data</th>
+                            <th data-hide="phone">Stack</th> -->
+                            <th data-hide="phone" >Updated at</th>
+                            <th class="text-right">Created at</th>
+                        </tr>
+                    </thead>
+                    <tbody>  <!-- { fragment: 'line 100' }:true -->
+                    <tr ng-if="vm.application.version" ng-repeat="ob in vm.eventList | filter:vm.filterEvents | filter: {app_version: vm.appVersions}">
+                        <td class="issue-info">
+                            <a href="#">
+                                {{ob.event_type}}
+                            </a>
+                        </td>
+                        <td>
+    						{{ob.fragment}}
+                        </td>
+
+                      <!--   <td>
+                        	{{ob.data}}
+                        </td>
+                        <td>
+                            {{ob.stack}}
+                        </td> -->
+                        <td>
+                            {{ob.updatedAt | date}}
+                        </td>
+                        <td class="text-right">
+                            {{ob.createdAt | date}}
+                        </td>
                     </tr>
-                </thead>
-                <tbody>  <!-- { fragment: 'line 100' }:true -->
-                <tr ng-repeat="ob in vm.eventList | filter:vm.filterEvents">
-                    <td class="issue-info">
-                        <a href="#">
-                            {{ob.event_type}}
-                        </a>
-                    </td>
-                    <td>
-						{{ob.fragment}}
-                    </td>
 
-                    <td>
-                    	{{ob.data}}
-                    </td>
-                    <td>
-                        {{ob.stack}}
-                    </td>
-                    <td>
-                        {{ob.updatedAt | date}}
-                    </td>
-                    <td class="text-right">
-                        {{ob.createdAt | date}}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    <tr ng-if="!vm.application.version" ng-repeat="ob in vm.eventList | filter:vm.filterEvents">
+                        <td class="issue-info">
+                            <a href="#">
+                                {{ob.event_type}}
+                            </a>
+                        </td>
+                        <td>
+                            {{ob.fragment}}
+                        </td>
+
+                        <td>
+                            {{ob.data}}
+                        </td>
+                        <td>
+                            {{ob.stack}}
+                        </td>
+                        <td>
+                            {{ob.updatedAt | date}}
+                        </td>
+                        <td class="text-right">
+                            {{ob.createdAt | date}}
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

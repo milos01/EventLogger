@@ -7,9 +7,20 @@
 
 		var ida = $stateParams.appId;
 		
+		// vm.fragmentNames = [];
+
 		EventResource.getEventsByIdApp(ida).then(function(res){
-			console.log(res);
+			
 			vm.eventList = res;
+	
+			// for(ev in vm.eventList){
+			// 	vm.eventTypes = vm.eventList[ev].fragment.split('&')[0];
+			// 	if (!(vm.eventList[ev].fragment.split('&')[1] in vm.fragmentNames)) {
+			// 		console.log("usao");
+   // 					 vm.fragmentNames.push(vm.eventList[ev].fragment.split('&')[1]);
+			// 	}
+			// 	console.log(vm.fragmentNames);
+			// }
 		});
 
 		ApplicationResource.getAppById(ida).then(function(res){
@@ -17,8 +28,17 @@
 		});
 		vm.filterEvents = "All";
 
+		vm.appVersions = "All";
+
+		// vm.filterNames = "All";
+
 		vm.getCount = function(f){
 			return filterFilter(vm.eventList, {fragment:f}).length;
+		}
+
+		vm.getVersionList = function(version){
+			vm.appVersions = version;
+			console.log(version);
 		}
 
 		vm.openListUserModal = function(ida) {
@@ -27,6 +47,18 @@
         	   // parent:'home',
         	   templateUrl: '/views/modals/userListModal.html',
         	   controller: 'UserListModalCtrl as vm',  
+        	   resolve: {
+        	      ida: function() {
+        	      return ida;
+        	      }
+        	   }
+        	});
+        };
+
+        vm.openDeleteModal = function(ida) {
+        	var modalInstance = $uibModal.open({
+        	   templateUrl: '/views/modals/deleteAppModal.html',
+        	   controller: 'deleteModalCtrl as vm',  
         	   resolve: {
         	      ida: function() {
         	      return ida;
@@ -45,6 +77,20 @@
 			console.log(vm.listUsers);
 
 		});
+
+		vm.cancel = function() {
+			// console.log("cancel");
+			$uibModalInstance.dismiss('cancel');
+		};
+	}]);
+
+    app.controller('deleteModalCtrl',['ida','$uibModalInstance','ApplicationResource',function(ida,$uibModalInstance,ApplicationResource) {
+		var vm = this;
+		
+		vm.yes = function(){
+			alert(ida);
+			$uibModalInstance.dismiss('cancel');
+		}
 
 		vm.cancel = function() {
 			// console.log("cancel");

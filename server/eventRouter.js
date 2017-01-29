@@ -48,6 +48,18 @@ eventRouter
 
     });
   })
+  //Get event
+  .get('/application/:aid/event/:eventId', function(req, res, next) {
+      Application.findOne({"_id": req.params.aid}, function(err, application) {
+        if (err) {
+          return next(err);
+        }
+        var event = application.events.filter(function (event) {
+          return String(event._id) === req.params.eventId;
+        }).pop();
+        res.json(event);
+    });
+  })
   //Get applicaiton events
   .get('/application/:aid/event', function(req, res, next) {
       Application.findOne({"_id": req.params.aid}, function(err, application) {
@@ -55,6 +67,24 @@ eventRouter
           return next(err);
         }
         res.json(application.events);
+    });
+  })
+  //Get application events with the same fragment
+  .get('/application/:aid/event/:eventId/fragment', function(req, res, next) {
+      Application.findOne({"_id": req.params.aid}, function(err, application) {
+        if (err) {
+          return next(err);
+        }
+        var event = application.events.filter(function (event) {
+          return String(event._id) === req.params.eventId;
+        }).pop();
+        var events = [];
+        application.events.filter(function (ev) {
+          if(event.fragment === ev.fragment && String(event._id) !== String(ev._id)){
+            events.push(ev);
+          }
+        });
+        res.json(events);
     });
   })
   //Delete event form collection

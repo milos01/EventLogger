@@ -8,7 +8,7 @@ var CommentSchema = new Schema({
     type: String,
     required: true
   },
-  owner: { type: Schema.Types.ObjectId, ref: 'user' },
+  owner: { type: Schema.Types.ObjectId, ref: 'user', required: true },
   createdAt: Date,
   updatedAt: Date,
   // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama

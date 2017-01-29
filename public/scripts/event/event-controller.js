@@ -112,6 +112,97 @@
 		};
 	}]);
 
+	app.controller('eventInfoCtrl',function(EventResource,$stateParams,ApplicationResource,CommentResource,UserResource, meanData){
+
+		var vm = this;
+
+		var ida = $stateParams.appId;
+		var ide = $stateParams.eventId;
+
+		vm.showDialog = [];
+
+		ApplicationResource.getAppById(ida).then(function(res){
+			vm.application = res;
+
+			EventResource.getEvent(ida, ide).then(function(res){
+				vm.event = res;
+
+				vm.typeStyle = function(type){
+					var style = 'label label-primary';
+					if(type.toUpperCase() === 'ERROR'){
+						style = 'label label-danger';
+					}
+					else if(type.toUpperCase() === 'WARNING'){
+						style = 'label label-warning';
+					}
+					else if(type.toUpperCase() === 'INFO'){
+						style = 'label label-success';
+					}	
+					return style;
+				}
+
+				function filterEvents(){
+					var eventList = [];
+					angular.forEach(vm.application.events, function(value, key){
+						if(value.fragment === vm.event.fragment && value._id !== vm.event._id){
+							eventList.push(value);
+						}
+					});
+					return eventList;
+				}
+				vm.filteredEvents = filterEvents();
+
+				CommentResource.getEventComments(ide).then(function(res){
+					vm.comments = res;
+				})
+
+			});
+
+			vm.getUserCommented = function(uid){
+				UserResource.getUserById(uid).then(function(res){
+					vm.userCommented = res;
+				});
+			};
+
+			vm.commentText = "";
+
+			vm.postComment = function(){
+				if(vm.commentText.trim().length > 0){
+					var text = vm.commentText.trim();
+					meanData.getLoggedUser().then(function(res){
+						var owner = res.data._id;
+						CommentResource.postEventComment(ide, text, owner).then(function(res){
+							vm.comments = res.comments;
+							vm.commentText = "";
+						});
+					});
+				}
+			};
+
+			vm.replySubComment = function(c){
+				vm.showDialog[c._id] = true;
+				console.log(vm.showDialog[c._id]);
+			}
+
+			vm.postSubComment = function(c){
+				console.log(vm.subcommentText[c._id]);
+				if(vm.subcommentText[c._id].trim().length > 0){
+					var text = vm.subcommentText[c._id].trim();
+					meanData.getLoggedUser().then(function(res){
+						var owner = res.data._id;
+						var comment = c._id;
+						CommentResource.postEventSubComment(ide, text, owner, comment).then(function(res){
+							vm.comments = res.comments;
+							vm.subcommentText[c._id] = "";
+						});
+					});
+				}
+			};
+			
+		});
+		
+	});
+
 	app.filter('unique', function() {
 	   return function(collection, keyname) {
 	      var output = [], 

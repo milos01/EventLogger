@@ -42,7 +42,7 @@
                 parent: 'home',
                 views: {
                     'profileView@home': {
-                        templateUrl: "/views/somepage.html",
+                        templateUrl: "/views/event.html",
                         controller: "someCtrl"
                     }
                 }
@@ -55,6 +55,19 @@
                         url: "applicationProf/:appId",
                         templateUrl: "/views/aplication.html",
                         controller: "eventlCtrl",
+                        controllerAs: 'vm'
+
+                    }
+                }
+            })
+            .state('eventPage', {
+                parent: 'home',
+                params : { appId: null, eventId: null },
+                views: {
+                    'profileView@home': {
+                        url: "applicationProf/:appId/event/:eventId",
+                        templateUrl: "/views/event.html",
+                        controller: "eventInfoCtrl",
                         controllerAs: 'vm'
 
                     }

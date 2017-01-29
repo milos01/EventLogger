@@ -19,7 +19,6 @@ commentRouter
         if (err) {
           return next(err);
         }
-       
         var event = ev.events.filter(function (event) {
           return String(event._id) === req.params.eid;
         }).pop();
@@ -30,7 +29,10 @@ commentRouter
           if (err) {
             return next(err);
           }
-          res.json(savedEvent);
+          var updatedEvent = savedEvent.events.filter(function (event) {
+            return String(event._id) === req.params.eid;
+          }).pop();
+          res.json(updatedEvent);
         });
     });
   })
@@ -45,13 +47,13 @@ commentRouter
         }
        
         var event = ev.events.filter(function (event) {
-          return event.data === 'some_data';
+          return String(event._id) === req.params.eid;
         }).pop();
         res.json(event.comments);
     });
   })
-   //Post new comment
-  .post('/event/:eid/comment/:cid/subomment', function(req, res, next) {
+   //Post new subcomment
+  .post('/event/:eid/comment/:cid/subcomment', function(req, res, next) {
       var comment = new Comment(req.body);
       
       
@@ -60,11 +62,11 @@ commentRouter
           return next(err);
         }
         var event = ev.events.filter(function (event) {
-          return event.data === 'some_data';
+          return String(event._id) === req.params.eid;
         }).pop();
 
         var comment1 = event.comments.filter(function (com) {
-          return com.text === 'some_text';
+          return String(com._id) === req.params.cid;
         }).pop();
         // res.json(comment1);
         comment1.comments.push(comment);
@@ -73,7 +75,10 @@ commentRouter
           if (err) {
             return next(err);
           }
-          res.json(savedEvent);
+          var updatedEvent = savedEvent.events.filter(function (event) {
+            return String(event._id) === req.params.eid;
+          }).pop();
+          res.json(updatedEvent);
         });
     });
   })

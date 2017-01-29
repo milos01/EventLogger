@@ -5,9 +5,8 @@
 		var retVal = {};
 
 		
-// /application/:aid/event
+		//application/:aid/event
 		retVal.getEventsByIdApp =  function(ida){
-			console.log(ida);
 			return Restangular.one('application',ida).all('event').getList().then(function(response){
 				return response;
 			});
@@ -27,6 +26,15 @@
 				return res;
 			});
 		}
+
+		//application/:aid/event/:eid
+		retVal.getEvent =  function(ida, ide){
+			return Restangular.one('application',ida).one('event', ide).get().then(function(response){
+				return response;
+			});
+		}
+
+
 
 		return retVal;
 	})

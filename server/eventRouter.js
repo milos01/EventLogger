@@ -19,18 +19,28 @@ eventRouter
   //Post new event
   .post('/application/:aid/event', function(req, res, next) {
     var event = new Event(req.body);
+
       Application.findOne({"_id": req.params.aid}, function(err, application) {
         if (err) {
           return next(err);
         }
-        application.events.push(event);
-        application.save(function(err, savedEvent){
-          if (err) {
-            return next(err);
-          }
-          commonEmitter.emit('sendMail', event, application.app_name);
-          res.json(savedEvent);
-        });
+        
+        var dns = req.body.dns;
+        if (dns==application.dns){
+            application.events.push(event);
+            application.save(function(err, savedEvent){
+              if (err) {
+                return next(err);
+              }
+              commonEmitter.emit('sendMail', event, application.app_name);
+              res.json(savedEvent);
+            });
+        }
+        else{
+          var ob = {"fild":true};
+          res.json(ob);
+        }
+
     });
   })
   //Get applicaiton events

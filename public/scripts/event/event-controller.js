@@ -90,11 +90,20 @@
 		var vm = this;
 		
 		vm.ap = appl;
+		vm.dnsError = false;
 		vm.yes = function(){
+			console.log(vm.dns +" aaaaaaaaaa");
 			EventResource.saveNewEvent(vm,vm.ap).then(function(res){
-				$scope.eventList.push(res.events[res.events.length-1]);
+				console.log(res);
+				if (res.fild==true){
+					vm.dnsError = true;
+				}
+				else{
+					$scope.eventList.push(res.events[res.events.length-1]);
+					$uibModalInstance.dismiss('cancel');
+				}
 			});
-			$uibModalInstance.dismiss('cancel');
+			// $uibModalInstance.dismiss('cancel');
 		}
 
 		vm.cancel = function() {

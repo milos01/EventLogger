@@ -19,8 +19,10 @@
 				"stack":obj.stack,
 				"event_type":obj.event_type,
 				"fragment":obj.fragment,
-				"app_version": ap.version
+				"app_version": ap.version,
+				"dns": obj.dns
 			}
+			console.log("a "+ obj.dns);
 			return Restangular.one('application',ap._id).all('event').post(ev).then(function(res){
 				return res;
 			});

@@ -34,7 +34,8 @@
 			</fieldset>
 
 	        <label>App current version</label>
-	        <input type="text" class="form-control" id="app_version" name="vm.ap.version" ng-model="vm.ap.version" ng-value="vm.ap.version" disabled/>
+	        {{vm.ap.app_version}}
+	        <input type="text" class="form-control" id="app_version" name="vm.ap.version" ng-model="vm.ap.version" ng-value="vm.ap.version"/>
 
 	        <div style="color:red" ng-show="vm.dnsError"> Can't find dns! Misspelled dns address! </div>
 	    </fieldset>

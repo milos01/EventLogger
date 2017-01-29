@@ -1,7 +1,6 @@
 (function (angular) {
 
-
-  app = angular.module('EventLoggerApp', ['ui.router', 'restangular','ui.bootstrap']);
+  app = angular.module('EventLoggerApp', ['ui.router', 'restangular', 'ui.bootstrap', 'hSweetAlert']);
 
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
     $urlRouterProvider.otherwise('/');

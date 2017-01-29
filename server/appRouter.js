@@ -42,6 +42,16 @@ appRouter
       res.json(user.owner_applications);
     });
   })
+  //Get users assigned_applications
+  .get('/user/:id/applications', auth, function(req, res, next) {
+    User.findOne({"_id": req.params.id}).populate('assigned_applications').exec(function(err, user) {
+      if (err) {
+        return next(err);
+      }
+
+      res.json(user.assigned_applications);
+    });
+  })
   //Post new application for user
   .post('/user/:id/application', function(req, res, next) {
     var application = new Application(req.body);
@@ -108,13 +118,32 @@ appRouter
         });
     }
   })
+  //Get all assigned users for some applicatiom 
+  .get('/application/:aid/users', function(req, res, next) {
+      Application.findOne({"_id": req.params.aid}, function(err, application) {
+        if (err) {
+          return next(err);
+        }
+        res.json(application.users);
+    });
+  })
   //Delete application
   .delete('/application/:id', function (req, res, next) {
-    Application.remove({"_id":req.params.id},function (err, successIndicator) {
-      if(err){
-        return next(err);
+
+    Application.findOne({"_id": req.params.id}).exec(function(err, application) {
+      if (err) {
+          return next(err);
       }
-      res.json(successIndicator);
+      var app = application;
+
+      Application.findOneAndRemove({"_id":req.params.id},function (err, appl) {
+        if(err){
+          return next(err);
+        }
+        appl.remove();
+        // console.log(appl);
+      });
+      res.json(app);
     });
   });
 

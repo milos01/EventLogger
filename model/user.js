@@ -69,7 +69,7 @@ UsersSchema.pre('save', function(next) {
 });
 
 // od sheme kreiramo model koji cemo koristiti
-var User = mongoose.model('User', UsersSchema);
+// var User = mongoose.model('User', UsersSchema);
 
 // publikujemo kreirani model
-module.exports = User;
+module.exports = mongoose.model('User', UsersSchema);

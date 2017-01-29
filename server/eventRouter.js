@@ -27,6 +27,11 @@ eventRouter
         
         var dns = req.body.dns;
         if (dns==application.dns){
+          if(!isNaN(parseFloat(event.app_version))){
+            if(parseFloat(application.version) < parseFloat(event.app_version)){
+              application.version = event.app_version;
+            } 
+          }
             application.events.push(event);
             application.save(function(err, savedEvent){
               if (err) {
@@ -54,6 +59,8 @@ eventRouter
   })
   //Delete event form collection
   .delete('/application/:aid/event/:eid', function(req, res, next) {
+    console.log(typeof application._id);
+    console.log(typeof targetUserId);
     Application.update( 
         { _id: req.params.aid },
         { $pull: { events : { _id : req.params.eid } } },

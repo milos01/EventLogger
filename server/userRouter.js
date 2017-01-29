@@ -22,6 +22,15 @@ userRouter
       res.json(user);
     });
   })
+  //Get user by email
+  .get('/usere/:email', function(req, res, next) {
+    User.findOne({"email": req.params.email}).exec(function(err, user) {
+      if (err){
+        return next(err);
+      }
+      res.json(user);
+    });
+  })
   //Get all users with owner_applications and assigned_applications
   .get('/user', function(req, res) {
       User.find({}).populate('owner_applications').populate('assigned_applications').exec(function(err, data, next) {

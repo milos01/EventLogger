@@ -46,7 +46,22 @@ ApplicaitionSchema.pre('save', function(next) {
   next();
 });
 
-// od sheme kreiramo model koji cemo koristiti
+ApplicaitionSchema.pre('remove', function(next) {
+    // Remove all the assignment docs that reference the removed application.
+    this.model('User').update(
+        { },
+        { "$pull": { "assigned_applications": this._id } },
+        { "multi": true },
+        next
+    );
+    // Remove all the owner docs that reference the removed application.
+    this.model('User').update(
+        { },
+        { "$pull": { "owner_applications": this._id } },
+        { "multi": true },
+        next
+    );
+});
 
 
 // publikujemo kreirani model

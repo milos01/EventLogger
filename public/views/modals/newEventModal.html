@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h3 class="modal-title">Creating new event for app</h3>
+</div>
+<div class="modal-body">
+
+   <form >
+   		<fieldset class="form-group">
+	        <label>Event type</label>
+	        <select class="form-control" id="event_type" name="event_type" ng-model="vm.event_type">
+	        	<option value="">Select type</option>
+	        	<option value="Error">Error</option>
+	        	<option value="Warning">Warning</option>
+	        	<option value="Info">Info</option>
+	        </select>
+
+	        <label>Data</label>
+	        <input type="text" class="form-control" id="data" name="data" ng-model="vm.data"/>
+
+			<label>Stack</label>
+	        <input type="text" class="form-control" id="stack" name="stack" ng-model="vm.stack"/>
+
+	        <label>Fragment</label>
+	        <input type="text" class="form-control" id="fragment" name="fragment" ng-model="vm.fragment"/>
+
+	        <label>App current version</label>
+	        <input type="text" class="form-control" id="app_version" name="vm.ap.version" ng-model="vm.ap.version" ng-value="vm.ap.version" disabled/>
+
+	    </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+ <button class="btn btn-info btn-sm" type="button" ng-click="vm.yes()">Send</button>
+
+  <button class="btn btn-default btn-sm" type="button" ng-click="vm.cancel()">Cancel</button>
+</div>

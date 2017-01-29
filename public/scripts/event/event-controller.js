@@ -1,7 +1,7 @@
 (function(angular){
 
 
-	app.controller('eventlCtrl',function(EventResource,$stateParams,ApplicationResource,$uibModal,filterFilter){
+	app.controller('eventlCtrl',function(EventResource,$stateParams,ApplicationResource,$uibModal,filterFilter,$scope){
 
 		var vm = this;
 
@@ -11,7 +11,7 @@
 
 		EventResource.getEventsByIdApp(ida).then(function(res){
 			
-			vm.eventList = res;
+			$scope.eventList = res;
 	
 			// for(ev in vm.eventList){
 			// 	vm.eventTypes = vm.eventList[ev].fragment.split('&')[0];
@@ -33,7 +33,7 @@
 		// vm.filterNames = "All";
 
 		vm.getCount = function(f){
-			return filterFilter(vm.eventList, {fragment:f}).length;
+			return filterFilter($scope.eventList, {fragment:f}).length;
 		}
 
 		vm.getVersionList = function(version){
@@ -55,13 +55,15 @@
         	});
         };
 
-        vm.openDeleteModal = function(ida) {
+        vm.openEventModal = function(appl) {
         	var modalInstance = $uibModal.open({
-        	   templateUrl: '/views/modals/deleteAppModal.html',
-        	   controller: 'deleteModalCtrl as vm',  
+        	   // parent: 'applicationProf',
+        	   templateUrl: '/views/modals/newEventModal.html',
+        	   controller: 'eventModalCtrl as vm',
+        	   scope: $scope, 
         	   resolve: {
-        	      ida: function() {
-        	      return ida;
+        	      appl: function() {
+        	      return appl;
         	      }
         	   }
         	});
@@ -84,11 +86,14 @@
 		};
 	}]);
 
-    app.controller('deleteModalCtrl',['ida','$uibModalInstance','ApplicationResource',function(ida,$uibModalInstance,ApplicationResource) {
+    app.controller('eventModalCtrl',['appl','$uibModalInstance','EventResource','$scope',function(appl,$uibModalInstance,EventResource,$scope) {
 		var vm = this;
 		
+		vm.ap = appl;
 		vm.yes = function(){
-			alert(ida);
+			EventResource.saveNewEvent(vm,vm.ap).then(function(res){
+				$scope.eventList.push(res.events[res.events.length-1]);
+			});
 			$uibModalInstance.dismiss('cancel');
 		}
 

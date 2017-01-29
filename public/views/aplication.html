@@ -19,9 +19,11 @@
     <div class="ibox-content">
         <div class="m-b-lg">
             <div class="m-t-md">
-                <strong>Found {{vm.eventList.length}} events.</strong>
+                <strong>Found {{eventList.length}} events.</strong>
 
-                <button style="float:right" class="btn btn-default" ng-click="vm.openListUserModal(vm.application._id)">Show users</button>
+                <button style="float:right;margin-left:6px;" class="btn btn-success" ng-click="vm.openEventModal(vm.application)">Event</button>
+
+                <button style="float:right;margin-right:6px;" class="btn btn-default" ng-click="vm.openListUserModal(vm.application._id)">Show users</button>
 
             </div>
         </div>
@@ -29,7 +31,7 @@
             <div ng-if="vm.application.version">
                 <b>App  versions:  </b> <select ng-model="vm.appVersions" ng-init="vm.appVersions=0" ng-change="vm.getVersionList(vm.appVersions)" >
                         <option ng-value="0">All</option>
-                        <option ng-repeat="ob in vm.eventList | unique:'app_version'" ng-value="ob.app_version" >{{ob.app_version}}</option>
+                        <option ng-repeat="ob in eventList | unique:'app_version'" ng-value="ob.app_version" >{{ob.app_version}}</option>
                     </select>
                 </br>
             </div>
@@ -38,7 +40,7 @@
           <b>Show events:</b> <select ng-model="vm.filterEvents" ng-init="vm.filterEvents=0">
                     <!-- <option value="" ng-if="false"></option> -->
                     <option ng-value="0">All</option>
-                    <option ng-repeat="ob in vm.eventList | unique:'fragment'" ng-value="ob.fragment" >{{ob.fragment}} (
+                    <option ng-repeat="ob in eventList | unique:'fragment'" ng-value="ob.fragment" >{{ob.fragment}} (
     In total {{vm.getCount(ob.fragment)}})</option>
                 </select> <b>fragments.</b>
 
@@ -64,7 +66,7 @@
                         </tr>
                     </thead>
                     <tbody>  <!-- { fragment: 'line 100' }:true -->
-                    <tr ng-if="vm.application.version" ng-repeat="ob in vm.eventList | filter:vm.filterEvents | filter: {app_version: vm.appVersions}">
+                    <tr ng-if="vm.application.version" ng-repeat="ob in eventList | filter:vm.filterEvents | filter: {app_version: vm.appVersions}">
                         <td class="issue-info">
                             <a href="#">
                                 {{ob.event_type}}
@@ -88,7 +90,7 @@
                         </td>
                     </tr>
 
-                    <tr ng-if="!vm.application.version" ng-repeat="ob in vm.eventList | filter:vm.filterEvents">
+                    <tr ng-if="!vm.application.version" ng-repeat="ob in eventList | filter:vm.filterEvents">
                         <td class="issue-info">
                             <a href="#">
                                 {{ob.event_type}}
@@ -98,12 +100,12 @@
                             {{ob.fragment}}
                         </td>
 
-                        <td>
+                     <!--    <td>
                             {{ob.data}}
                         </td>
                         <td>
                             {{ob.stack}}
-                        </td>
+                        </td> -->
                         <td>
                             {{ob.updatedAt | date}}
                         </td>

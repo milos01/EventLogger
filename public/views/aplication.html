@@ -52,6 +52,7 @@
                     <thead>
                         <tr>
                             <th>Event type</th>
+                            <th data-hide="phone">Version</th>
                             <th data-hide="phone">Fragment</th>
                           <!--   <th data-hide="phone">Data</th>
                             <th data-hide="phone">Stack</th> -->
@@ -60,13 +61,16 @@
                         </tr>
                     </thead>
                     <tbody>  <!-- { fragment: 'line 100' }:true -->
-                    {{vm.appVersions}}
-                    <tr ng-if="vm.application.version" ng-repeat="ob in eventList |  filter:vm.filterEvents | filter: {app_version: vm.appVersions} ">
+            
+
+                    <tr ng-if="vm.application.version"  ng-repeat="ob in eventList |  filter:vm.filterEvents | filter: {app_version: vm.appVersions} ">
                         <td class="issue-info">
                             <a ui-sref="eventPage({appId: vm.application._id, eventId: ob._id})">
                                 {{ob.event_type}}
                             </a>
                         </td>
+
+                        <td>{{ob.app_version}}</td>
                         <td>
     						{{ob.fragment}}
                         </td>
@@ -84,18 +88,18 @@
                             {{ob.createdAt | date}}
                         </td>
                     </tr>
-
                     <tr ng-if="!vm.application.version" ng-repeat="ob in eventList | filter:vm.filterEvents">
                         <td class="issue-info">
                             <a ui-sref="eventPage({appId: vm.application._id, eventId: ob._id})">
                                 {{ob.event_type}}
                             </a>
                         </td>
+                        <td>{{ob.app_version}}</td>
                         <td>
                             {{ob.fragment}}
                         </td>
 
-                     <!--    <td>
+                       <!--  <td>
                             {{ob.data}}
                         </td>
                         <td>
